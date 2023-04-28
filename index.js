@@ -12,9 +12,14 @@ app.use(session({secret:"fsget473b4a",
                   resave:true,
                   saveUninitialized:true 
                 }))
-app.post("/form",(request,response)=>{
-console.log("recived form data",request.body);
-response.send("Recived")
+app.post("/form",async (request,response)=>{
+    await CheckToken(request);
+        let envelopesApi = getEnvelopeApi(request);
+        let envelope = makeEnvelope(request.body.name,request.body.email)
+        let results = await envelopesApi.createEnvelope(
+        process.env.ACCOUNT_ID, {envelopeDefinition: envelope});
+        console.log("envelop Results",results)
+        response.send("Recived")
 })
 
 function getEnvelopeApi(request){
@@ -23,31 +28,15 @@ function getEnvelopeApi(request){
     dsApiClient.addDefaultHeader('Authorization', 'Bearer ' + request.session.access_token);
     return new docusign.EnvelopesApi(dsApiClient);
 }
-function makeEnvelope(args){
-
-    // Create the envelope definition
+function makeEnvelope(name,email){
     let env = new docusign.EnvelopeDefinition();
-    env.templateId = args.templateId;
-
-    // Create template role elements to connect the signer and cc recipients
-    // to the template
-    // We're setting the parameters via the object creation
+    env.templateId = process.env.TEMPLATE_ID;
     let signer1 = docusign.TemplateRole.constructFromObject({
-        email: args.signerEmail,
-        name: args.signerName,
-        roleName: 'signer'});
-
-    // Create a cc template role.
-    // We're setting the parameters via setters
-    let cc1 = new docusign.TemplateRole();
-    cc1.email = args.ccEmail;
-    cc1.name = args.ccName;
-    cc1.roleName = 'cc';
-
-    // Add the TemplateRole objects to the envelope object
-    env.templateRoles = [signer1, cc1];
-    env.status = "sent"; // We want the envelope to be sent
-
+        email: email,
+        name: name,
+        roleName: 'Applicant'});
+    env.templateRoles = [signer1];
+    env.status = "sent"; 
     return env;
 }
 
@@ -56,12 +45,12 @@ async function CheckToken(request){
         console.log("re-using-accses_token",request.session.access_token);
     }
     else{
-        console.log("genrating new access token")
+        // console.log("genrating new access token")
     let dsApiClient = new docusign.ApiClient();
     dsApiClient.setBasePath(process.env.BASE_PATH);
     const results = await dsApiClient.requestJWTUserToken(process.env.INTEGRATION_KEY,process.env.USER_ID ,"signature",fs.readFileSync(path.join(__dirname,"private.key")), 3600);
     // https://account-d.docusign.com/oauth/auth?response_type=code &scope=signature%20impersonation&client_id=e1c3e4c6-f455-4610-8d33-492127d8e315 &redirect_uri=http://localhost:3000
-    console.log(results.body)
+    // console.log(results.body)
     request.session.access_token=results.body.access_token;
     request.session.expires_at=Date.now()+(results.body.expires_in)*1000;
     }
