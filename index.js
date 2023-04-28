@@ -17,6 +17,14 @@ console.log("recived form data",request.body);
 response.send("Recived")
 })
 
+function getEnvelopeApi(request){
+    let dsApiClient = new docusign.ApiClient();
+    dsApiClient.setBasePath(process.env.BASE_PATH);
+    dsApiClient.addDefaultHeader('Authorization', 'Bearer ' + request.session.access_token);
+    let envelopesApi = new docusign.EnvelopesApi(dsApiClient);
+}
+
+
 async function CheckToken(request){
     if(request.session.access_token && Date.now()<request.session.expires_at){
         console.log("re-using-accses_token",request.session.access_token);
