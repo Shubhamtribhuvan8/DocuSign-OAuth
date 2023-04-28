@@ -4,10 +4,14 @@ const path=require("path");
 const dotenv=require("dotenv");
 const docusign=require("docusign-esign")
 const fs=require("fs")
+const session=require("express-session")
 const app=express();
 dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(session({secret:"fsget473b4a",
+                  resave:true,
+                  saveUninitialized:true 
+                }))
 app.post("/form",(request,response)=>{
 console.log("recived form data",request.body);
 response.send("Recived")
@@ -16,8 +20,9 @@ response.send("Recived")
 app.get("/",async(request,response)=>{
     let dsApiClient = new docusign.ApiClient();
     dsApiClient.setBasePath(process.env.BASE_PATH);
-    const results = await dsApi.requestJWTUserToken(process.env.INTEGRATION_KEY,process.env.USER_ID ,"signature", fs.readFileSync(path.join(__dirname,"private_key")), 3600);
-    
+    const results = await dsApiClient.requestJWTUserToken(process.env.INTEGRATION_KEY,process.env.USER_ID ,"signature",fs.readFileSync(path.join(__dirname,"private.key")), 3600);
+    // https://account-d.docusign.com/oauth/auth?response_type=code &scope=signature%20impersonation&client_id=e1c3e4c6-f455-4610-8d33-492127d8e315 &redirect_uri=http://localhost:3000
+    console.log(results.body)
     response.sendFile(path.join(__dirname,"main.html"))
 })
 
