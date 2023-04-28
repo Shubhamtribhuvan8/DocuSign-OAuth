@@ -1,9 +1,10 @@
 const express=require("express");
-const bodyparser=require("body-parser");
+const bodyParser = require('body-parser');
 const path=require("path");
-
+const dotenv=require("dotenv");
 const app=express();
-app.use(bodyparser.urlencoded({extended:true}))
+dotenv.config();
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/form",(request,response)=>{
 console.log("recived form data",request.body);
@@ -15,5 +16,5 @@ app.get("/",(request,response)=>{
 })
 
 app.listen(3000,()=>{
-    console.log("server statted succesfully!");
+    console.log("server statted succesfully!",process.env.USER_ID);
 })
