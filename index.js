@@ -23,6 +23,8 @@ app.get("/",async(request,response)=>{
     const results = await dsApiClient.requestJWTUserToken(process.env.INTEGRATION_KEY,process.env.USER_ID ,"signature",fs.readFileSync(path.join(__dirname,"private.key")), 3600);
     // https://account-d.docusign.com/oauth/auth?response_type=code &scope=signature%20impersonation&client_id=e1c3e4c6-f455-4610-8d33-492127d8e315 &redirect_uri=http://localhost:3000
     console.log(results.body)
+    request.session.access.token=results.body.access.token;
+    request.session.expires_at=Date.now()+(results.body.expires_in)*1000;
     response.sendFile(path.join(__dirname,"main.html"))
 })
 
