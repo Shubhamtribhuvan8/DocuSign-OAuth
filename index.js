@@ -21,9 +21,35 @@ function getEnvelopeApi(request){
     let dsApiClient = new docusign.ApiClient();
     dsApiClient.setBasePath(process.env.BASE_PATH);
     dsApiClient.addDefaultHeader('Authorization', 'Bearer ' + request.session.access_token);
-    let envelopesApi = new docusign.EnvelopesApi(dsApiClient);
+    return new docusign.EnvelopesApi(dsApiClient);
 }
+function makeEnvelope(args){
 
+    // Create the envelope definition
+    let env = new docusign.EnvelopeDefinition();
+    env.templateId = args.templateId;
+
+    // Create template role elements to connect the signer and cc recipients
+    // to the template
+    // We're setting the parameters via the object creation
+    let signer1 = docusign.TemplateRole.constructFromObject({
+        email: args.signerEmail,
+        name: args.signerName,
+        roleName: 'signer'});
+
+    // Create a cc template role.
+    // We're setting the parameters via setters
+    let cc1 = new docusign.TemplateRole();
+    cc1.email = args.ccEmail;
+    cc1.name = args.ccName;
+    cc1.roleName = 'cc';
+
+    // Add the TemplateRole objects to the envelope object
+    env.templateRoles = [signer1, cc1];
+    env.status = "sent"; // We want the envelope to be sent
+
+    return env;
+}
 
 async function CheckToken(request){
     if(request.session.access_token && Date.now()<request.session.expires_at){
