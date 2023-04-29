@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.MuiInputBase-input  {
+  padding: 16.5px 105px !important;
+}
