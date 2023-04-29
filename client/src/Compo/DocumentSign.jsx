@@ -33,13 +33,14 @@ function Form() {
     top:1,
     borderColor: 'text.primary',
     width: '29rem',
-    height: '20rem',
+    height: '28rem',
   };
   return (
       <div>
       <ToastContainer/>
      <h1>Docusign</h1>
       <Box sx={{ ...commonStyles, border: 1 }}>
+      <h3>Please Login Your Account/Google</h3>
         <br/>
       <form onSubmit={handleSubmit}>
         <TextField required type="text" 
@@ -63,10 +64,11 @@ function Form() {
           name="company"
           value={company}
           onChange={(event) => setCompany(event.target.value)}
-           placeholder="Company" />
+           placeholder="Company Name" />
       <br /> <br />  
 
-      <Button variant="outlined" type="submit"> Submit</Button>
+      <Button variant="outlined" type="submit"> Contineue With DocuSign</Button>
+      <br /> <br /> 
       <CircularProgress />
      </form>
        </Box>
