@@ -5,8 +5,11 @@ const dotenv=require("dotenv");
 const docusign=require("docusign-esign")
 const fs=require("fs")
 const session=require("express-session")
+const cors = require('cors');
+
 const app=express();
 dotenv.config();
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({secret:"fsget473b4a",
                   resave:true,
