@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Input } from '@mui/material';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 import { ToastContainer, toast } from 'react-toastify';
 //npm i react-toastify
 function Form() {
@@ -19,8 +20,9 @@ function Form() {
     };
     try {
       const response=await axios.post('http://localhost:3000/form', data);   
-      console.log("all ok",response.data.url)  
+      console.log("all ok",response.data.url) 
       window.location.href = response.data.url;
+      toast.success("Redirecting...!") 
      } catch (error) {
       console.log(error)
     }
@@ -65,6 +67,7 @@ function Form() {
       <br /> <br />  
 
       <Button variant="outlined" type="submit"> Submit</Button>
+      <CircularProgress />
      </form>
        </Box>
     </div>
