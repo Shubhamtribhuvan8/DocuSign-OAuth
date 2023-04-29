@@ -1,19 +1,22 @@
 const express = require("express");
 const path = require("path");
+const cors = require('cors');
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 dotenv.config();
 const docusign = require("docusign-esign");
 const fs = require("fs");
 const session = require("express-session");
-
 const app = express();
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.use(session({
    secret: "dfsf94835asda",
    resave: true,
    saveUninitialized: true,
 }));
+app.use(express.static('public'));
 
 app.post("/form", async (request, response) => {
    await checkToken(request);
@@ -24,12 +27,11 @@ app.post("/form", async (request, response) => {
        process.env.ACCOUNT_ID, {envelopeDefinition: envelope});
    console.log("envelope results ", results);
 
-   
+
    let viewRequest = makeRecipientViewRequest(request.body.name, request.body.email);
    results = await envelopesApi.createRecipientView(process.env.ACCOUNT_ID, results.envelopeId,
        {recipientViewRequest: viewRequest});
-
-   response.redirect(results.url);
+       response.json({ url: results.url });
 });
 
 function getEnvelopesApi(request) {
@@ -85,7 +87,7 @@ async function checkToken(request) {
           process.env.USER_ID,
           "signature",
           fs.readFileSync(path.join(__dirname, "private.key")),
-          3600
+          2000
       );
       console.log(results.body);
       request.session.access_token = results.body.access_token;
@@ -95,12 +97,12 @@ async function checkToken(request) {
 
 app.get("/", async (request, response) => {
    await checkToken(request);
-   response.sendFile(path.join(__dirname, "main.html"));
+   response.sendFile(path.join(__dirname, "public"));
 });
 
-app.get("/success", (request, resposne) => {
-   resposne.send("Success");
-});
+app.get("/success", (request, response) => {
+   response.redirect('/docusign-success');
+ });
 
 // https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature%20impersonation&client_id=(YOUR CLIENT ID)&redirect_uri=http://localhost:8000/
 

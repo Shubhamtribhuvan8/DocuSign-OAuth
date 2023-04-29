@@ -1,10 +1,14 @@
 import './App.css';
-import DocumentSignature from './Compo/DocumentSign';
-
+import Form from './Compo/DocumentSign';
+import DocusignSuccess from './Compo/Sucess';
+import { Route,Routes } from 'react-router-dom'
 function App() {
   return (
     <div className="App">
-     <DocumentSignature/>
+      <Routes>
+            <Route path="/" element={ <Form/>} />
+            <Route path="/docusign-success" element={<DocusignSuccess/>} />
+        </Routes>
     </div>
   );
 }

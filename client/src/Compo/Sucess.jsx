@@ -1,15 +1,25 @@
-import { Box, Heading, Text, VStack } from '@chakra-ui/react'
-import React from 'react'
-const DocusignSucess = () => {
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+const DocusignSuccess = () => {
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/docusign-success')
+      .then(response => {
+        console.log(response.data);
+        setSuccess(true);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
-        <Box>
-            <VStack h="100vh" justifyContent={"center"} >
-             <Heading textTransform={"uppercase"}>Successfully Done With DocuSign</Heading>
-            </VStack>
-        </Box>
+      {success && <span>Successfully Done With DocuSign</span>}
     </div>
-  )
+  );
 }
 
-export default DocusignSucess
+export default DocusignSuccess;
