@@ -23,7 +23,8 @@ app.post("/form", async (request, response) => {
    let results = await envelopesApi.createEnvelope(
        process.env.ACCOUNT_ID, {envelopeDefinition: envelope});
    console.log("envelope results ", results);
-// Create the recipient view, the Signing Ceremony
+
+   
    let viewRequest = makeRecipientViewRequest(request.body.name, request.body.email);
    results = await envelopesApi.createRecipientView(process.env.ACCOUNT_ID, results.envelopeId,
        {recipientViewRequest: viewRequest});
@@ -43,8 +44,6 @@ function makeEnvelope(name, email, company){
    env.templateId = process.env.TEMPLATE_ID;
    let text = docusign.Text.constructFromObject({
       tabLabel: "company_name", value: company});
-
-   // Pull together the existing and new tabs in a Tabs object:
    let tabs = docusign.Tabs.constructFromObject({
       textTabs: [text],
    });
@@ -58,21 +57,18 @@ function makeEnvelope(name, email, company){
 
    env.templateRoles = [signer1];
    env.status = "sent";
-
    return env;
 }
 
-function makeRecipientViewRequest(name, email,clientId) {
-
+function makeRecipientViewRequest(name, email) {
    let viewRequest = new docusign.RecipientViewRequest();
+
    viewRequest.returnUrl = "http://localhost:3000/success";
    viewRequest.authenticationMethod = 'none';
-
-   // Recipient information must match embedded recipient info
-   // we used to create the envelope.
    viewRequest.email = email;
    viewRequest.userName = name;
    viewRequest.clientUserId = process.env.CLIENT_USER_ID;
+
    return viewRequest
 }
 
@@ -106,7 +102,7 @@ app.get("/success", (request, resposne) => {
    resposne.send("Success");
 });
 
-// https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature%20impersonation&client_id=(YOUR CLIENT ID)&redirect_uri=http://localhost:3000/
+// https://account-d.docusign.com/oauth/auth?response_type=code&scope=signature%20impersonation&client_id=(YOUR CLIENT ID)&redirect_uri=http://localhost:8000/
 
 app.listen(3000, () => {
    console.log("server has started", process.env.USER_ID);
