@@ -4,7 +4,7 @@ const DocusignSuccess = () => {
   // const [success, setSuccess] = useState(false);
 
   // useEffect(() => {
-  //   axios.get('https://docusign-api.onrender.com/docusign-success')
+  //   axios.get('https://docusign-api.onrender.com/success')
   //     .then(response => {
   //       console.log(response.data);
   //       setSuccess(true);

@@ -7,7 +7,7 @@ function App() {
     <div className="App">
       <Routes>
             <Route path="/" element={ <Form/>} />
-            <Route path="/docusign-success" element={<DocusignSuccess/>} />
+            <Route path="/docusign-success?event=viewing_complete" element={<DocusignSuccess/>} />
         </Routes>
     </div>
   );

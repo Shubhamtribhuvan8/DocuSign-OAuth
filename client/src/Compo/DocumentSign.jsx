@@ -10,9 +10,10 @@ function Form() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
-
+  const [loading, setLoading] = useState(false);
     const handleSubmit = async(event) => {
     event.preventDefault();
+    setLoading(true);
     const data = {
       name:name,
       email: email,
@@ -23,6 +24,7 @@ function Form() {
       console.log("all ok",response.data.url) 
       window.location.href = response.data.url;
       toast.success("Redirecting...!") 
+      setLoading(false); 
      } catch (error) {
       console.log(error)
     }
@@ -69,7 +71,7 @@ function Form() {
 
       <Button variant="outlined" type="submit"> Contineue With DocuSign</Button>
       <br /> <br /> 
-      <CircularProgress />
+      {loading && <CircularProgress />}
      </form>
        </Box>
     </div>
