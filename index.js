@@ -24,7 +24,7 @@ app.post("/form", async (request, response) => {
    let envelope = makeEnvelope(request.body.name, request.body.email, request.body.company);
 
    let results = await envelopesApi.createEnvelope(
-       process.env.ACCOUNT_ID, {envelopeDefinition: envelope});
+   process.env.ACCOUNT_ID, {envelopeDefinition: envelope});
    console.log("envelope results ", results);
 
 
@@ -70,7 +70,6 @@ function makeRecipientViewRequest(name, email) {
    viewRequest.email = email;
    viewRequest.userName = name;
    viewRequest.clientUserId = process.env.CLIENT_USER_ID;
-
    return viewRequest
 }
 
