@@ -7,7 +7,7 @@ DocuSign-OAuth
  
  Steps To Clone it and Run In your Local Machine
 
-    Clone the repo by typing this git clone https://github.com/suryathink/Assignment.git in your terminal into an empty folder of yours in local system.
+    Clone the repo by typing this git clone https://github.com/Shubhamtribhuvan8/DocuSign-OAuth in your terminal into an empty folder of yours in local system.
 
     Go to the project folder using the below shortcut
 
