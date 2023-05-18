@@ -14,8 +14,10 @@
 
   `cd client`
 
-   # Install npm packages using  npm install command from your Terminal.
+   # Install npm packages using command from your Terminal.
 
-  Now to run the Project in your `https://localhost:3000` type npm run start in your terminal and press Enter
+  `npm install`
+ 
+  Now to run the Project in your `https://localhost:3000` type `npm run start` in your terminal and press Enter
   It will take 4-5 seconds and the project will start on your default browser.
 
